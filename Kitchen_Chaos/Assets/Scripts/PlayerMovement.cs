@@ -5,33 +5,21 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    
+  [SerializeField] float speed;
+  [SerializeField] GameInput gameInput;
+   
    void Update()
    {
-    Vector2 inputVector = new Vector2(0,0);
+    Vector2 inputVector = gameInput.MovementVector2Normalized();
 
-    if (Input.GetKey(KeyCode.W))
-    {
-     inputVector.y += 1;
-    }
-    if (Input.GetKey(KeyCode.S))
-    {
-     inputVector.y -= 1;
-    }
-    if (Input.GetKey(KeyCode.A))
-    {
-      inputVector.x += 1;
-    }
-    if (Input.GetKey(KeyCode.D))
-    {
-        inputVector.x -= 1;
-    }
-
-    Debug.Log(inputVector);
-    inputVector = inputVector.normalized;
+    //we made a new Vector3 and assigned vector2(inputVector2) x value to its x and its y value to vector3's z value
     Vector3 movDir = new Vector3(inputVector.x , 0f, inputVector.y);
+    transform.position += movDir *speed * Time.deltaTime;
+    
+    float rotationSpeed = 15f;
+    //for player face rotation
+    transform.forward = Vector3.Slerp(transform.position, movDir, Time.deltaTime * rotationSpeed);
 
-    transform.position += movDir * Time.deltaTime;  // yahan abhi speed ka variable dalna h
    }
 
 }
