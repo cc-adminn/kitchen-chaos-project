@@ -1,21 +1,59 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.iOS;
 
-public class PlayerMovement : MonoBehaviour
+public class Player : MonoBehaviour
 {
+  public static Player Instance{get; private set;}                      //this is called property of class which we can set or get  
+
+  public event EventHandler<OnSelectCounterChangedEventArgs> OnSelectedCounterChanged;   //making a new event when we approached a counter
+
+   public class OnSelectCounterChangedEventArgs : EventArgs            //made class to send more data with the EventHandler's Event Args property 
+   {
+    public ClearCounter selectedCounter;
+   }
+
   [SerializeField] float speed;
   [SerializeField] GameInput gameInput;
   private Vector3 lastInteractDirection;
   [SerializeField] LayerMask layerMaskForCounter;
+  private ClearCounter selectedCounter;                                 //now i am using this comparing this counter with the counter that is present at the moment, in handle interaction method
    
+   
+
+
+   void Awake()
+   {
+      if(Instance != null)
+      {
+        Debug.LogError("There is more than one player instance");
+      }
+      Instance = this;
+   }
+   
+   void Start()
+   {
+    GameInput.OnInteract += GameInput_OnInteraction;                    //listening the eventHandler call form gameInput and assigning it to the method 'Game
+   }
+
+
    void Update()
    {
     HandleMovement();
     HandleInteractions();
-    
+   }
+
+   void GameInput_OnInteraction(object sender, EventArgs eventArgs)    //if player pressed E, then a event happened in game input class that sends a message and we're handling it here
+   {
+    if (selectedCounter != null)
+    {
+      selectedCounter.Interact();
+    }
    }
 
    void HandleInteractions()
@@ -33,9 +71,22 @@ public class PlayerMovement : MonoBehaviour
     {
       if (hitInfo.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
       {
-        clearCounter.Interact();
+        if (clearCounter != selectedCounter)                            //if the clear counter we contacted with is not equal to the selectedCounter
+        {
+          SetSelectedCounter(selectedCounter);                          //then the selected counter will become the counter mean we will be enabling it, it is now on separate function
+        }
+        else
+        {
+          SetSelectedCounter(null);
+        }
+      }
+      else                                                              //if the counter does not have clearcounter component than selectedCounter stil be null;
+      {
+        SetSelectedCounter(null);
       }
     }
+
+    Debug.Log(selectedCounter);
 
 
    }
@@ -98,6 +149,12 @@ public class PlayerMovement : MonoBehaviour
 
    }
 
+  private void SetSelectedCounter(ClearCounter selectedCounter)
+  {
+    this.selectedCounter = selectedCounter;
+
+    OnSelectedCounterChanged?.Invoke(this, new OnSelectCounterChangedEventArgs{selectedCounter = selectedCounter});   //the first selectedCounter variable is of Args while the second one is of Player script
+  }
    }
 
 
