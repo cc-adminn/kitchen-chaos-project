@@ -9,7 +9,9 @@ using UnityEngine.InputSystem.iOS;
 
 public class Player : MonoBehaviour
 {
-   [SerializeField] float speed;
+  [SerializeField] float bodyHeight = 2f;
+  [SerializeField] float bodyRadius = 0.7f;
+  [SerializeField] float speed;
   [SerializeField] GameInput gameInput;
   [SerializeField] LayerMask layerMaskForCounter;
   private Vector3 lastInteractDirection;
@@ -34,59 +36,20 @@ public class Player : MonoBehaviour
 
    void HandleMovement()
    {
-    Vector2 inputVector = gameInput.MovementVector2Normalized();        //getting input vecctor2 from playerInputSystemClass
-
-    Vector3 movDir = new Vector3(inputVector.x , 0f, inputVector.y);    //we made a new Vector3 and assigned vector2(inputVector2) x value to its x and its y value to vector3's z value
-
-
-
-    float moveDistance  = speed * Time.deltaTime;                       //this the distance player can move in a single frame
+    float movDistance = speed * Time.deltaTime;                  //this is a way to calculate distance in a single frame e.g 7*0.01 = 0.07 in single frame and if there are 100 frames running in a second then in one second player will move 0.07 * 100 = 7
+    Vector2 inputVector = gameInput.GetMovementVector2Normalized();
+    Vector3 movDir = new Vector3(inputVector.x, 0, inputVector.y);
+    transform.position += movDir * movDistance;
     
-    float bodyHeight = 2f;
-    float bodyRadius = .7f;                                             //estimated thickness of the capsule body
     
-    bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * bodyHeight , bodyRadius , movDir , moveDistance );
-
-
-    if (!canMove)                                                       //if player has collided with something lets see what else we can do
-    {
-      
-
-                                      
-      Vector3 movDirX = new Vector3(movDir.x, 0 , 0);                   //direction to move only in X axis
-      Vector3 movDirZ = new Vector3(0, 0, movDir.z);                    //direction to move only in Z axis
-
-
-      canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * bodyHeight , bodyRadius , movDirX , moveDistance );
-         if (canMove)       
-         {
-          movDir = movDirX;      //the above line checks collision in the direction of x and if there isnt any collision, then it move change direction to specifically in x axis
-         }
-         else
-         {                       //if there is not any collision in x direction then check for collsion in z axis if their is no collision then move to z direction
-          canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * bodyHeight , bodyRadius, movDirZ, moveDistance);
-
-          if (canMove)       
-         {
-          movDir = movDirZ;      //direction changes to specifically z direction, no more possibilities
-         }
-
-         }
-    }
-
-    if (canMove)                 //if no collision detected move freely
-    {
-      transform.position += movDir *moveDistance ;
-    }
+    
     
 
-                              
-    Debug.DrawLine(transform.position, transform.position + Vector3.up * bodyHeight +  movDir * moveDistance, Color.red);  //debug line to check player body in editor
     
 
     //for player face rotation
-    float rotationSpeed = 15f;
-    transform.forward = Vector3.Slerp(transform.position, movDir, Time.deltaTime * rotationSpeed);
+    float rotationSpeed = 10f;
+    transform.forward = Vector3.Slerp(transform.forward, movDir, Time.deltaTime * rotationSpeed);
 
    }
 

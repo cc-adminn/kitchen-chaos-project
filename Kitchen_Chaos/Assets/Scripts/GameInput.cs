@@ -18,7 +18,7 @@ public class GameInput : MonoBehaviour
         playerInputActionClass.Player.Enable();
         playerInputActionClass.Player.Interact.performed += PlayerInteractions;
     }
-    public Vector2 MovementVector2Normalized()
+    public Vector2 GetMovementVector2Normalized()
     {
       
     Vector2 inputVector = playerInputActionClass.Player.Move.ReadValue<Vector2>();
