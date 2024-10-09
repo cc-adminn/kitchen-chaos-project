@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Kitchen_Chaos.sln"
+    "dotnet.defaultSolution": "Kitchen_Chaos.sln",
+    "editor.guides.indentation": false
 }

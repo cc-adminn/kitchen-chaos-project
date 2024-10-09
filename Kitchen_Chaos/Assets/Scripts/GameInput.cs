@@ -9,7 +9,7 @@ public class GameInput : MonoBehaviour
 {
     PlayerInputActionClass playerInputActionClass;
 
-    
+
     public static event EventHandler OnInteract;
 
     void Awake()

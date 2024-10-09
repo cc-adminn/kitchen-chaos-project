@@ -602,6 +602,12 @@ Transform:
   - {fileID: 1924998674}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 46, y: 0, z: 0}
+--- !u!1 &639671217 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3734645325268705416, guid: 91441faf58dabbe4b88ea4d8486288be,
+    type: 3}
+  m_PrefabInstance: {fileID: 267240305267186503}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &740212802
 GameObject:
   m_ObjectHideFlags: 0
@@ -978,10 +984,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3734645325268705416, guid: 91441faf58dabbe4b88ea4d8486288be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6807991047161554040, guid: 91441faf58dabbe4b88ea4d8486288be,
         type: 3}
       propertyPath: m_Name
       value: ClearCounter
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834339342740079347, guid: 91441faf58dabbe4b88ea4d8486288be,
+        type: 3}
+      propertyPath: visualGamOject
+      value: 
+      objectReference: {fileID: 639671217}
+    - target: {fileID: 8766867094250112876, guid: 91441faf58dabbe4b88ea4d8486288be,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766867094250112876, guid: 91441faf58dabbe4b88ea4d8486288be,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8766867094250112876, guid: 91441faf58dabbe4b88ea4d8486288be,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

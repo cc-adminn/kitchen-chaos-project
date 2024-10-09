@@ -9,87 +9,28 @@ using UnityEngine.InputSystem.iOS;
 
 public class Player : MonoBehaviour
 {
-  public static Player Instance{get; private set;}                      //this is called property of class which we can set or get  
-
-  public event EventHandler<OnSelectCounterChangedEventArgs> OnSelectedCounterChanged;   //making a new event when we approached a counter
-
-   public class OnSelectCounterChangedEventArgs : EventArgs            //made class to send more data with the EventHandler's Event Args property 
-   {
-    public ClearCounter selectedCounter;
-   }
-
-  [SerializeField] float speed;
+   [SerializeField] float speed;
   [SerializeField] GameInput gameInput;
-  private Vector3 lastInteractDirection;
   [SerializeField] LayerMask layerMaskForCounter;
-  private ClearCounter selectedCounter;                                 //now i am using this comparing this counter with the counter that is present at the moment, in handle interaction method
+  private Vector3 lastInteractDirection;
    
-   
-
-
    void Awake()
    {
-      if(Instance != null)
-      {
-        Debug.LogError("There is more than one player instance");
-      }
-      Instance = this;
+      
    }
    
    void Start()
    {
-    GameInput.OnInteract += GameInput_OnInteraction;                    //listening the eventHandler call form gameInput and assigning it to the method 'Game
+   
    }
 
 
    void Update()
    {
     HandleMovement();
-    HandleInteractions();
    }
 
-   void GameInput_OnInteraction(object sender, EventArgs eventArgs)    //if player pressed E, then a event happened in game input class that sends a message and we're handling it here
-   {
-    if (selectedCounter != null)
-    {
-      selectedCounter.Interact();
-    }
-   }
-
-   void HandleInteractions()
-   {
-    Vector2 inputVector = gameInput.MovementVector2Normalized();        //getting input vecctor2 from playerInputSystemClass
-
-    Vector3 movDir = new Vector3(inputVector.x , 0f, inputVector.y);    //we made a new Vector3 and assigned vector2(inputVector
-    
-    if (movDir != Vector3.zero)                                         //if movDir is changing than we assign movDir value to lastInteractDirection other we using a simple movDir 
-    {
-      lastInteractDirection = movDir;
-    }
-    float distanceOfRayCast = 2f;
-    if(Physics.Raycast(transform.position, lastInteractDirection, out RaycastHit hitInfo, distanceOfRayCast, layerMaskForCounter))
-    {
-      if (hitInfo.transform.TryGetComponent<ClearCounter>(out ClearCounter clearCounter))
-      {
-        if (clearCounter != selectedCounter)                            //if the clear counter we contacted with is not equal to the selectedCounter
-        {
-          SetSelectedCounter(selectedCounter);                          //then the selected counter will become the counter mean we will be enabling it, it is now on separate function
-        }
-        else
-        {
-          SetSelectedCounter(null);
-        }
-      }
-      else                                                              //if the counter does not have clearcounter component than selectedCounter stil be null;
-      {
-        SetSelectedCounter(null);
-      }
-    }
-
-    Debug.Log(selectedCounter);
-
-
-   }
+   
 
    void HandleMovement()
    {
@@ -149,12 +90,6 @@ public class Player : MonoBehaviour
 
    }
 
-  private void SetSelectedCounter(ClearCounter selectedCounter)
-  {
-    this.selectedCounter = selectedCounter;
-
-    OnSelectedCounterChanged?.Invoke(this, new OnSelectCounterChangedEventArgs{selectedCounter = selectedCounter});   //the first selectedCounter variable is of Args while the second one is of Player script
-  }
    }
 
 
