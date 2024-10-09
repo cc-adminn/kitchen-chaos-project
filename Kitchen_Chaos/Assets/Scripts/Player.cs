@@ -1,58 +1,19 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.iOS;
 
 public class Player : MonoBehaviour
 {
-  [SerializeField] float bodyHeight = 2f;
-  [SerializeField] float bodyRadius = 0.7f;
-  [SerializeField] float speed;
+  [SerializeField] float playerSpeed;
+  [SerializeField] float playerRotation;
   [SerializeField] GameInput gameInput;
-  [SerializeField] LayerMask layerMaskForCounter;
-  private Vector3 lastInteractDirection;
-   
-   void Awake()
+   private void Update()
    {
-      
-   }
-   
-   void Start()
-   {
-   
-   }
-
-
-   void Update()
-   {
-    HandleMovement();
-   }
-
-   
-
-   void HandleMovement()
-   {
-    float movDistance = speed * Time.deltaTime;                  //this is a way to calculate distance in a single frame e.g 7*0.01 = 0.07 in single frame and if there are 100 frames running in a second then in one second player will move 0.07 * 100 = 7
-    Vector2 inputVector = gameInput.GetMovementVector2Normalized();
-    Vector3 movDir = new Vector3(inputVector.x, 0, inputVector.y);
-    transform.position += movDir * movDistance;
+    Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
+    Vector3 movDir = new Vector3(inputVector2FromGameInput.x, 0, inputVector2FromGameInput.y);
     
+    transform.position += movDir * playerSpeed * Time.deltaTime;
     
-    
-    
-
-    
-
-    //for player face rotation
-    float rotationSpeed = 10f;
-    transform.forward = Vector3.Slerp(transform.forward, movDir, Time.deltaTime * rotationSpeed);
-
+    transform.forward = Vector3.Slerp(transform.forward, movDir , Time.deltaTime * playerRotation);       //this line is for the rotation of the body when its moving and rotating it on the same direction where moving
    }
-
-   }
-
-
+}
