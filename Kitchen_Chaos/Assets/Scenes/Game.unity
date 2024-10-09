@@ -170,6 +170,9 @@ MonoBehaviour:
   playerSpeed: 7
   playerRotation: 10
   gameInput: {fileID: 2084592925}
+  layerMaskForCounters:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1001 &162816503
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -839,7 +842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 835587415}
   - component: {fileID: 835587414}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ClearCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
