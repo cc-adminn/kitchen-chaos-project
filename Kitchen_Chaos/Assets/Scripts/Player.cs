@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+  private ClearCounter selecctedCounter;
   float bodyHeight = 2f;
   float bodyRadius = 0.7f;
   Vector3 lastInteractibleDir;
@@ -26,20 +27,12 @@ public class Player : MonoBehaviour
 
    void GameInput_OnInteract(object sender, EventArgs eventArgs)              //as the delegate was of type EventArgs so we have to make two paremeter inside that method
    {
-     Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
-    Vector3 movDir = new Vector3(inputVector2FromGameInput.x, 0, inputVector2FromGameInput.y);
-
-    if (movDir != Vector3.zero)    //we check if the movement input is not zero and has a value we immediately store it in a new varialble called lastInteractDir
-    {
-      lastInteractibleDir = movDir;  //reason: when we stop movDir becomes zero so even if we are near any object we are not throwing raycast in any direction
-    }
-    if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist, layerMaskForCounters))
-    {
-      if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
+     
+      if(selecctedCounter != null)
       {
-        clearCounter.Interact();
+        selecctedCounter.Interact();
       }
-    }
+    
     
    }
 
@@ -52,13 +45,29 @@ public class Player : MonoBehaviour
     {
       lastInteractibleDir = movDir;  //reason: when we stop movDir becomes zero so even if we are near any object we are not throwing raycast in any direction
     }
+
+
+
     if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist, layerMaskForCounters))
-    {
-      if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
       {
-        //clearCounter.Interact();
+            if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))   //clear counter is a local variable of method while selectedCounter is a usual private member of the class
+            {
+                  if (clearCounter != selecctedCounter)
+                  {
+                    selecctedCounter = clearCounter;
+                  }
+            }
+            else
+            {
+              selecctedCounter = null;
+            }
       }
-    }
+    else
+      {
+           selecctedCounter = null;
+      }
+    Debug.Log(selecctedCounter);
+    
    }
    private void HandleMovement()
    {
