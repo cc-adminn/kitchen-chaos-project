@@ -1,24 +1,74 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+  float bodyHeight = 2f;
+  float bodyRadius = 0.7f;
+  Vector3 lastInteractibleDir;
+  float playerInteractionDist = 2f;
   [SerializeField] float playerSpeed;
   [SerializeField] float playerRotation;
   [SerializeField] GameInput gameInput;
   [SerializeField] LayerMask layerMaskForCounters;
-  float bodyHeight = 2f;
-  float bodyRadius = 0.7f;
+  void Start()
+  {
+    gameInput.OnInteract += GameInput_OnInteract;
+  }
+  
    private void Update()
+   {
+    HandleMovement();
+    HandleInteraction();
+   }
+
+   void GameInput_OnInteract(object sender, EventArgs eventArgs)              //as the delegate was of type EventArgs so we have to make two paremeter inside that method
+   {
+     Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
+    Vector3 movDir = new Vector3(inputVector2FromGameInput.x, 0, inputVector2FromGameInput.y);
+
+    if (movDir != Vector3.zero)    //we check if the movement input is not zero and has a value we immediately store it in a new varialble called lastInteractDir
+    {
+      lastInteractibleDir = movDir;  //reason: when we stop movDir becomes zero so even if we are near any object we are not throwing raycast in any direction
+    }
+    if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist, layerMaskForCounters))
+    {
+      if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
+      {
+        clearCounter.Interact();
+      }
+    }
+    
+   }
+
+   private void HandleInteraction()
    {
     Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
     Vector3 movDir = new Vector3(inputVector2FromGameInput.x, 0, inputVector2FromGameInput.y);
-    Vector3 movDirX = new Vector3(movDir.x, 0, 0);
-    Vector3 movDirZ = new Vector3(0, 0, movDir.z);
+
+    if (movDir != Vector3.zero)    //we check if the movement input is not zero and has a value we immediately store it in a new varialble called lastInteractDir
+    {
+      lastInteractibleDir = movDir;  //reason: when we stop movDir becomes zero so even if we are near any object we are not throwing raycast in any direction
+    }
+    if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist, layerMaskForCounters))
+    {
+      if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))
+      {
+        //clearCounter.Interact();
+      }
+    }
+   }
+   private void HandleMovement()
+   {
+    Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
+    Vector3 movDir = new Vector3(inputVector2FromGameInput.x, 0, inputVector2FromGameInput.y);
+    Vector3 movDirX = new Vector3(movDir.x, 0, 0).normalized;
+    Vector3 movDirZ = new Vector3(0, 0, movDir.z).normalized;
     
     Vector3 endPoint = transform.position + Vector3.up * bodyHeight;                            //position of this gameobject is its base while we move up from base 2 units to reach its height
-    bool canMove = !Physics.CapsuleCast(transform.position, endPoint, bodyRadius, movDir, playerSpeed * Time.deltaTime, layerMaskForCounters);
+    bool canMove = !Physics.CapsuleCast(transform.position, endPoint, bodyRadius, movDir, playerSpeed * Time.deltaTime);
     
     if (!canMove)       //mean we have hit something lets check if we can move on x axis for this we will direction dedicated for x-axis
     {
