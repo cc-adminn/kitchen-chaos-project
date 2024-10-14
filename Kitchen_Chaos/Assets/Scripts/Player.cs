@@ -9,9 +9,9 @@ public class Player : MonoBehaviour
   float bodyHeight = 2f;
   float bodyRadius = 0.7f;
   Vector3 lastInteractibleDir;
-  float playerInteractionDist = 2f;
   [SerializeField] float playerSpeed;
   [SerializeField] float playerRotation;
+  [SerializeField] float playerInteractionDist = 3f;
   [SerializeField] GameInput gameInput;
   [SerializeField] LayerMask layerMaskForCounters;
   void Start()
@@ -27,13 +27,10 @@ public class Player : MonoBehaviour
 
    void GameInput_OnInteract(object sender, EventArgs eventArgs)              //as the delegate was of type EventArgs so we have to make two paremeter inside that method
    {
-     
       if(selecctedCounter != null)
       {
         selecctedCounter.Interact();
       }
-    
-    
    }
 
    private void HandleInteraction()
@@ -45,10 +42,9 @@ public class Player : MonoBehaviour
     {
       lastInteractibleDir = movDir;  //reason: when we stop movDir becomes zero so even if we are near any object we are not throwing raycast in any direction
     }
-
-
-
-    if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist, layerMaskForCounters))
+   
+    
+    if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist))
       {
             if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))   //clear counter is a local variable of method while selectedCounter is a usual private member of the class
             {
@@ -108,4 +104,9 @@ public class Player : MonoBehaviour
     
     transform.forward = Vector3.Slerp(transform.forward, movDir , Time.deltaTime * playerRotation);       //this line is for the rotation of the body when its moving and rotating it on the same direction where moving
    }
+
+
+
+
+
 }
