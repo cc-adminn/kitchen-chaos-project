@@ -141,7 +141,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7247521767497740309}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0.00000058114523}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -0.04546523, y: 0, z: 3.8905334}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -169,8 +169,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5456569, y: 1.277615, z: 1.5265112}
-  m_Center: {x: -0.0047864914, y: 0.66531867, z: 0.043077886}
+  m_Size: {x: 1.5456569, y: 1.3327839, z: 1.5265112}
+  m_Center: {x: -0.0047864914, y: 0.6377342, z: 0.043077886}
 --- !u!114 &3975660449934357162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,6 +192,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8856581612800045091}
+  - component: {fileID: 761463375096573649}
   m_Layer: 0
   m_Name: SelectedCounter
   m_TagString: Untagged
@@ -215,6 +216,20 @@ Transform:
   - {fileID: 6419517335790482664}
   m_Father: {fileID: 7925573041614324966}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &761463375096573649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722604630273342151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc9caa5206fe4790aa6dc938d824d63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clearCounter: {fileID: 3975660449934357162}
+  selectedVisual: {fileID: 8181509420316094220}
 --- !u!1 &8181509420316094220
 GameObject:
   m_ObjectHideFlags: 0

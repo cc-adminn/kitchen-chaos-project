@@ -5,15 +5,35 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-  private ClearCounter selecctedCounter;
+  public static Player Instance{get; private set;}
+
+
+  public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+  public class OnSelectedCounterChangedEventArgs : EventArgs 
+  {
+    public ClearCounter selectedCounter;   //this variable will be checked with the clearCounter variable present in SelectedCounter class
+  }
+
+
+
+  private ClearCounter selectedCounter;
   float bodyHeight = 2f;
   float bodyRadius = 0.7f;
   Vector3 lastInteractibleDir;
   [SerializeField] float playerSpeed;
-  [SerializeField] float playerRotation;
-  [SerializeField] float playerInteractionDist = 3f;
   [SerializeField] GameInput gameInput;
   [SerializeField] LayerMask layerMaskForCounters;
+
+  void Awake()
+  {
+    if (Instance != null)
+    {
+      Debug.LogError("more than one instance of player");
+    }
+    Instance = this;
+  }
+
+
   void Start()
   {
     gameInput.OnInteract += GameInput_OnInteract;
@@ -27,9 +47,9 @@ public class Player : MonoBehaviour
 
    void GameInput_OnInteract(object sender, EventArgs eventArgs)              //as the delegate was of type EventArgs so we have to make two paremeter inside that method
    {
-      if(selecctedCounter != null)
+      if(selectedCounter != null)
       {
-        selecctedCounter.Interact();
+        selectedCounter.Interact();
       }
    }
 
@@ -43,26 +63,30 @@ public class Player : MonoBehaviour
       lastInteractibleDir = movDir;  //reason: when we stop movDir becomes zero so even if we are near any object we are not throwing raycast in any direction
     }
    
-    
+    float playerInteractionDist = 2f;
     if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist))
       {
             if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))   //clear counter is a local variable of method while selectedCounter is a usual private member of the class
             {
-                  if (clearCounter != selecctedCounter)
+              
+                  if (clearCounter != selectedCounter)
                   {
-                    selecctedCounter = clearCounter;
+                    selectedCounter = clearCounter;
+                    OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
                   }
             }
             else
             {
-              selecctedCounter = null;
+              selectedCounter = null;
+              OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
             }
       }
     else
       {
-           selecctedCounter = null;
+           selectedCounter = null;
+           OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
       }
-    Debug.Log(selecctedCounter);
+    Debug.Log(selectedCounter);
     
    }
    private void HandleMovement()
@@ -101,7 +125,7 @@ public class Player : MonoBehaviour
       transform.position += movDir * playerSpeed * Time.deltaTime;
     }
     
-    
+    float playerRotation = 10f;
     transform.forward = Vector3.Slerp(transform.forward, movDir , Time.deltaTime * playerRotation);       //this line is for the rotation of the body when its moving and rotating it on the same direction where moving
    }
 
@@ -110,3 +134,4 @@ public class Player : MonoBehaviour
 
 
 }
+//this. blur kiun h 
