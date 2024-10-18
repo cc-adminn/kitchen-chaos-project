@@ -7,15 +7,13 @@ public class Player : MonoBehaviour
 {
   public static Player Instance{get; private set;}
 
-
   public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
   public class OnSelectedCounterChangedEventArgs : EventArgs 
   {
     public ClearCounter selectedCounter;   //this variable will be checked with the clearCounter variable present in SelectedCounter class
   }
 
-
-
+  
   private ClearCounter selectedCounter;
   float bodyHeight = 2f;
   float bodyRadius = 0.7f;
@@ -63,7 +61,7 @@ public class Player : MonoBehaviour
       lastInteractibleDir = movDir;  //reason: when we stop movDir becomes zero so even if we are near any object we are not throwing raycast in any direction
     }
    
-    float playerInteractionDist = 2f;
+    float playerInteractionDist = 1f;
     if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist))
       {
             if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))   //clear counter is a local variable of method while selectedCounter is a usual private member of the class
@@ -83,7 +81,7 @@ public class Player : MonoBehaviour
       }
     else
       {
-           selectedCounter = null;
+            selectedCounter = null;
            OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
       }
     Debug.Log(selectedCounter);
@@ -134,4 +132,3 @@ public class Player : MonoBehaviour
 
 
 }
-//this. blur kiun h 
