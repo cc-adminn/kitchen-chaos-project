@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
       }
    }
 
+
    private void HandleInteraction()
    {
     Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
@@ -84,9 +85,10 @@ public class Player : MonoBehaviour
             selectedCounter = null;
            OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
       }
-    Debug.Log(selectedCounter);
     
    }
+
+
    private void HandleMovement()
    {
     Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
