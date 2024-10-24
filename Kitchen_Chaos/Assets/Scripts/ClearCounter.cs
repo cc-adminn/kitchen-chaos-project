@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour
+public class ClearCounter : MonoBehaviour, IKitchenObjectParent
 {
 
     [SerializeField] KitchenObjectSO kitchenObjectSO;          //through this will get info which scriptable object prefab we have to instantiate
@@ -11,18 +11,20 @@ public class ClearCounter : MonoBehaviour
     [SerializeField] bool testing;
     [SerializeField] ClearCounter secondClearCounter;
 
-    public void Interact()
+
+    public void Interact(Player player)
     {
         if (kitchenObjects == null)
         {
             Transform kitchenObjTransform = Instantiate(kitchenObjectSO.prefab, spawnPoint);
-            kitchenObjTransform.GetComponent<KitchenObjects>().SetClearCounter(this);
+            kitchenObjTransform.GetComponent<KitchenObjects>().SetKitchenObjectParent(this);
         }
         else
         {
-            Debug.Log(kitchenObjects.GetClearCounter());
+            Debug.Log(kitchenObjects.GetKItchenObjectParent());
         }
     }
+
 
 
     private void Update()
@@ -31,15 +33,19 @@ public class ClearCounter : MonoBehaviour
         {
             if (kitchenObjects!= null )
             {
-                kitchenObjects.SetClearCounter(secondClearCounter);
+                kitchenObjects.SetKitchenObjectParent(secondClearCounter);
             }
         }
     }
+
+
 
     public Transform GetKitchenObjSpawnPoint()
     {
         return spawnPoint;
     }
+
+
 
     public void SetKitchenObject(KitchenObjects kitchenObjects)
     {
@@ -47,15 +53,20 @@ public class ClearCounter : MonoBehaviour
     }
 
 
+
     public KitchenObjects GetKitchenObjects()
     {
         return kitchenObjects;
     }
 
+
+
     public bool IsKitchenObjectPresent()
     {
         return kitchenObjects != null;
     }
+
+
 
     public void ClearKitchenObject()
     {

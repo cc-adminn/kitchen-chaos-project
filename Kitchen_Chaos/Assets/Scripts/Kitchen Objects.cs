@@ -9,7 +9,9 @@ public class KitchenObjects : MonoBehaviour
 
 
     [SerializeField] KitchenObjectSO kitchenObjectSO;
-    private ClearCounter clearCounter;
+
+
+    private IKitchenObjectParent kitchenObjectParent;
 
     
     public KitchenObjectSO GetKitchObjSO()
@@ -17,31 +19,37 @@ public class KitchenObjects : MonoBehaviour
         return kitchenObjectSO;
     }
 
-    public void SetClearCounter(ClearCounter clearCounter)
+
+
+    public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
     {
-        if (this.clearCounter != null)           // checks if any clear counter previsously attach 
+
+        if (this.kitchenObjectParent != null)           // checks if any clear counter previsously attach 
         {
-            this.clearCounter.ClearKitchenObject();   //then remove the kitchen object refrence from that counter
+            this.kitchenObjectParent.ClearKitchenObject();   //then remove the kitchen object refrence from that counter
         }
 
-        this.clearCounter = clearCounter;         // and then assign clear counter to the newly given clear counter ref
+        this.kitchenObjectParent = kitchenObjectParent;         // and then assign clear counter to the newly given clear counter ref
 
-        if(clearCounter.IsKitchenObjectPresent())
+        if(kitchenObjectParent.IsKitchenObjectPresent())
         {
-            Debug.Log("Counter already has a kitchen object");
+            Debug.Log("KitchenParentObject already has a kitchen object");
         }
 
-        clearCounter.SetKitchenObject(this);     //now assigning this kitchenobject to the new clear counter
+        kitchenObjectParent.SetKitchenObject(this);     //now assigning this kitchenobject to the new clear counter
 
-        transform.parent = clearCounter.GetKitchenObjSpawnPoint();
+        transform.parent = kitchenObjectParent.GetKitchenObjSpawnPoint();
         transform.localPosition = Vector3.zero;
 
         
-
     }
 
-    public ClearCounter GetClearCounter()
+
+
+    public IKitchenObjectParent GetKItchenObjectParent()
     {
-        return clearCounter;
+        return kitchenObjectParent;
     }
+
+
 }
