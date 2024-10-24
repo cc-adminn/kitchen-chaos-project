@@ -184,8 +184,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f53eac780aa84ccabfd3619758d3a8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tomatoPrefab: {fileID: 0}
-  spawnPoint: {fileID: 0}
+  kitchenObjectSO: {fileID: 0}
+  spawnPointCounter: {fileID: 8742325856564189734}
+  testing: 0
+  secondClearCounter: {fileID: 0}
 --- !u!1 &7722604630273342151
 GameObject:
   m_ObjectHideFlags: 0

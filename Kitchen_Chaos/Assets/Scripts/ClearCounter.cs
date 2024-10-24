@@ -6,35 +6,24 @@ public class ClearCounter : MonoBehaviour, IKitchenObjectParent
 {
 
     [SerializeField] KitchenObjectSO kitchenObjectSO;          //through this will get info which scriptable object prefab we have to instantiate
-    [SerializeField] Transform spawnPoint;
+
+    [SerializeField] Transform spawnPointCounter;
+
     private KitchenObjects kitchenObjects;
-    [SerializeField] bool testing;
-    [SerializeField] ClearCounter secondClearCounter;
+    
 
 
     public void Interact(Player player)
     {
         if (kitchenObjects == null)
         {
-            Transform kitchenObjTransform = Instantiate(kitchenObjectSO.prefab, spawnPoint);
+            Transform kitchenObjTransform = Instantiate(kitchenObjectSO.prefab, spawnPointCounter);
             kitchenObjTransform.GetComponent<KitchenObjects>().SetKitchenObjectParent(this);
         }
         else
         {
-            Debug.Log(kitchenObjects.GetKItchenObjectParent());
-        }
-    }
-
-
-
-    private void Update()
-    {
-        if (testing && Input.GetKeyDown(KeyCode.K))
-        {
-            if (kitchenObjects!= null )
-            {
-                kitchenObjects.SetKitchenObjectParent(secondClearCounter);
-            }
+            // clear counter already has kitchen object now return this to player
+            kitchenObjects.SetKitchenObjectParent(player);
         }
     }
 
@@ -42,7 +31,7 @@ public class ClearCounter : MonoBehaviour, IKitchenObjectParent
 
     public Transform GetKitchenObjSpawnPoint()
     {
-        return spawnPoint;
+        return spawnPointCounter;
     }
 
 

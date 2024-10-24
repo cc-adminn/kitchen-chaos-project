@@ -24,21 +24,16 @@ public class KitchenObjects : MonoBehaviour
     public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
     {
 
-        if (this.kitchenObjectParent != null)           // checks if any clear counter previsously attach 
+        if (this.kitchenObjectParent != null)           // checks if any clear counter previsously attach, if attach
         {
             this.kitchenObjectParent.ClearKitchenObject();   //then remove the kitchen object refrence from that counter
         }
 
         this.kitchenObjectParent = kitchenObjectParent;         // and then assign clear counter to the newly given clear counter ref
 
-        if(kitchenObjectParent.IsKitchenObjectPresent())
-        {
-            Debug.Log("KitchenParentObject already has a kitchen object");
-        }
-
         kitchenObjectParent.SetKitchenObject(this);     //now assigning this kitchenobject to the new clear counter
 
-        transform.parent = kitchenObjectParent.GetKitchenObjSpawnPoint();
+        transform.parent = kitchenObjectParent.GetKitchenObjSpawnPoint();  // making it child of selected Kitchen object Parent
         transform.localPosition = Vector3.zero;
 
         

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IKitchenObjectParent
 {
   public static Player Instance{get; private set;}
 
@@ -21,6 +21,9 @@ public class Player : MonoBehaviour
   [SerializeField] float playerSpeed;
   [SerializeField] GameInput gameInput;
   [SerializeField] LayerMask layerMaskForCounters;
+  [SerializeField] Transform kitchenObjectHoldPoint;
+  private KitchenObjects kitchenObject;
+
 
   void Awake()
   {
@@ -131,6 +134,36 @@ public class Player : MonoBehaviour
 
 
 
+    public Transform GetKitchenObjSpawnPoint()
+    {
+        return kitchenObjectHoldPoint;
+    }
 
 
+
+    public void SetKitchenObject(KitchenObjects kitchenObjects)
+    {
+        this.kitchenObject = kitchenObjects;
+    }
+
+
+
+    public KitchenObjects GetKitchenObjects()
+    {
+        return kitchenObject;
+    }
+
+
+
+    public bool IsKitchenObjectPresent()
+    {
+        return kitchenObject != null;
+    }
+
+
+
+    public void ClearKitchenObject()
+    {
+        kitchenObject = null;
+    }
 }
