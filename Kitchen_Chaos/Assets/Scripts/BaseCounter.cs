@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseCounter : MonoBehaviour
+public class BaseCounter : MonoBehaviour, IKitchenObjectParent
 {
 
     private KitchenObjects kitchenObjects;
-    //Transform spawnPointCounter;
+    [SerializeField] Transform spawnPointCounter;
 
 
     public virtual void Interact(Player player)
@@ -14,10 +14,10 @@ public class BaseCounter : MonoBehaviour
 
     }
 
-    //public Transform GetKitchenObjSpawnPoint()
-    //{
-    //    return spawnPointCounter;
-    //}
+    public Transform GetKitchenObjSpawnPoint()
+    {
+        return spawnPointCounter;
+    }
 
 
 
@@ -46,4 +46,5 @@ public class BaseCounter : MonoBehaviour
     {
         kitchenObjects = null;
     }
+
 }
