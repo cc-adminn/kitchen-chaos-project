@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ClearCounter : BaseCounter
 {
-    private KitchenObjects ktObj;
+    
+    [SerializeField] Player player;
 
     public override void Interact(Player player)
     {
@@ -16,7 +17,7 @@ public class ClearCounter : BaseCounter
             }
             else         //both dont have kitchen object
             {
-                //DO NOTHING
+                // can do swapping here but we are not allowing it, because in Kitchen object script SetKitchenObjectParent we have said set parent if it dont have kitchen object before
             }
         }
         else      //counter has kitchen object
@@ -31,6 +32,8 @@ public class ClearCounter : BaseCounter
             }
         }
     }
+
+    
     
 
 

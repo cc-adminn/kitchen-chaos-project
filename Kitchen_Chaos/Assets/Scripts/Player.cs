@@ -64,15 +64,25 @@ public class Player : MonoBehaviour, IKitchenObjectParent
   void Start()
   {
     gameInput.OnInteract += GameInput_OnInteract;
+        gameInput.OnInteractAlternate += GameInput_OnInteractAlternate;
   }
-  
-   private void Update()
+
+    void GameInput_OnInteractAlternate(object sender, EventArgs e)
+    {
+        if (selectedCounter != null)
+        {
+            selectedCounter.InteractAlternate(this);
+        }
+    }
+
+    private void Update()
    {
     HandleMovement();
     HandleInteraction();
    }
 
-   void GameInput_OnInteract(object sender, EventArgs eventArgs)              //as the delegate was of type EventArgs so we have to make two paremeter inside that method
+
+  void GameInput_OnInteract(object sender, EventArgs eventArgs)              //as the delegate was of type EventArgs so we have to make two paremeter inside that method
    {
       if(selectedCounter != null)
       {
@@ -81,7 +91,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
    }
 
 
-   private void HandleInteraction()
+  private void HandleInteraction()
    {
     Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
     Vector3 movDir = new Vector3(inputVector2FromGameInput.x, 0, inputVector2FromGameInput.y);
@@ -119,7 +129,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
    }
 
 
-   private void HandleMovement()
+  private void HandleMovement()
    {
     Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
     Vector3 movDir = new Vector3(inputVector2FromGameInput.x, 0, inputVector2FromGameInput.y);
@@ -131,7 +141,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     
     if (!canMove)       //mean we have hit something lets check if we can move on x axis for this we will direction dedicated for x-axis
     {
-      canMove = !Physics.CapsuleCast(transform.position, endPoint, bodyRadius, movDirX, playerSpeed* Time.deltaTime, layerMaskForCounters);
+      canMove = movDir.x != 0 && !Physics.CapsuleCast(transform.position, endPoint, bodyRadius, movDirX, playerSpeed* Time.deltaTime, layerMaskForCounters);
 
       if (canMove)
       {
@@ -139,7 +149,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
       }
       else
       {
-        canMove = !Physics.CapsuleCast(transform.position, endPoint, bodyRadius, movDirZ, playerSpeed * Time.deltaTime, layerMaskForCounters);
+        canMove = movDir.z != 0 && !Physics.CapsuleCast(transform.position, endPoint, bodyRadius, movDirZ, playerSpeed * Time.deltaTime, layerMaskForCounters);
         if (canMove)
         {
           movDir = movDirZ;

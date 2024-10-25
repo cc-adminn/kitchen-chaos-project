@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,12 +8,14 @@ public class GameInput : MonoBehaviour
 
 
     public event EventHandler OnInteract;
+    public event EventHandler OnInteractAlternate;
 
     void Awake()
     {
         playerInputActionClass = new PlayerInputActionClass();
         playerInputActionClass.Player.Enable();
         playerInputActionClass.Player.Interact.performed += PlayerInteractions;
+        playerInputActionClass.Player.InteractAlternate.performed += PlayerInteractAlternate;
     }
 
 
@@ -33,4 +32,10 @@ public class GameInput : MonoBehaviour
     {
      OnInteract?.Invoke(this, EventArgs.Empty);
     }
+
+
+    public void PlayerInteractAlternate(InputAction.CallbackContext contextt)
+    {
+     OnInteractAlternate?.Invoke(this, EventArgs.Empty);
+    }    
 }
