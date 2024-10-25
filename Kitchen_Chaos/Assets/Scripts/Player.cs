@@ -5,24 +5,50 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent
 {
-  public static Player Instance{get; private set;}
+
+
+
+
+  public static Player Instance{get; private set;}       // using singleton patterm making proprty of Player class in which every class can get its fields but no one can set
 
   public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+
   public class OnSelectedCounterChangedEventArgs : EventArgs 
   {
-    public ClearCounter selectedCounter;   //this variable will be checked with the clearCounter variable present in SelectedCounter class
+    public BaseCounter selectedCounter;   //this variable will be checked with the clearCounter variable present in SelectedCounter class
   }
 
   
-  private ClearCounter selectedCounter;
+
+
+
+
+  
+  private BaseCounter selectedCounter;
+
   float bodyHeight = 2f;
+
   float bodyRadius = 0.7f;
+
   Vector3 lastInteractibleDir;
+
   [SerializeField] float playerSpeed;
+
   [SerializeField] GameInput gameInput;
+
   [SerializeField] LayerMask layerMaskForCounters;
+
   [SerializeField] Transform kitchenObjectHoldPoint;
+
   private KitchenObjects kitchenObject;
+
+
+
+
+
+
+
+
 
 
   void Awake()
@@ -68,12 +94,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     float playerInteractionDist = 1f;
     if (Physics.Raycast(transform.position, lastInteractibleDir, out RaycastHit hitInfo, playerInteractionDist))
       {
-            if(hitInfo.transform.TryGetComponent(out ClearCounter clearCounter))   //clear counter is a local variable of method while selectedCounter is a usual private member of the class
+            if(hitInfo.transform.TryGetComponent(out BaseCounter baseCounter))   
             {
               
-                  if (clearCounter != selectedCounter)
+                  if (baseCounter != selectedCounter)
                   {
-                    selectedCounter = clearCounter;
+                    selectedCounter = baseCounter;
                     OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
                   }
             }
@@ -83,11 +109,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent
               OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
             }
       }
+
     else
-      {
-            selectedCounter = null;
-           OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
-      }
+          {
+             selectedCounter = null;
+             OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs{selectedCounter = selectedCounter});
+          }
     
    }
 
@@ -137,32 +164,32 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     public Transform GetKitchenObjSpawnPoint()
     {
         return kitchenObjectHoldPoint;
-    }
+    }  //will return us the hold point of kitchen object of player
 
 
 
     public void SetKitchenObject(KitchenObjects kitchenObjects)
     {
         this.kitchenObject = kitchenObjects;
-    }
+    }     //update the kitchen object of player
 
 
 
     public KitchenObjects GetKitchenObjects()
     {
         return kitchenObject;
-    }
+    }    //will return us the kitchen object present on player
 
 
 
     public bool IsKitchenObjectPresent()
     {
         return kitchenObject != null;
-    }
+    }    //checks if kitchen object is present or not
 
 
 
-    public void ClearKitchenObject()
+    public void ClearKitchenObject()     //set kichen object to null means remove it
     {
         kitchenObject = null;
     }

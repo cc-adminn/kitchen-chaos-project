@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour, IKitchenObjectParent
+public class ClearCounter : BaseCounter, IKitchenObjectParent
 {
 
     [SerializeField] KitchenObjectSO kitchenObjectSO;          //through this will get info which scriptable object prefab we have to instantiate
@@ -13,7 +13,7 @@ public class ClearCounter : MonoBehaviour, IKitchenObjectParent
     
 
 
-    public void Interact(Player player)
+    public override void Interact(Player player)
     {
         if (kitchenObjects == null)
         {

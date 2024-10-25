@@ -160,8 +160,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc9caa5206fe4790aa6dc938d824d63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clearCounter: {fileID: 5310140447908978822}
-  selectedVisual: {fileID: 9089755458578030557}
+  baseCounter: {fileID: 5310140447908978822}
+  selectedVisualArray:
+  - {fileID: 9089755458578030557}
 --- !u!1 &9089755458578030557
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,7 +257,7 @@ PrefabInstance:
     - target: {fileID: 7247521767497740309, guid: a7aa5254fd6e447c7a5ade33745e5794,
         type: 3}
       propertyPath: m_Name
-      value: ClearCounter
+      value: Clear Counter
       objectReference: {fileID: 0}
     - target: {fileID: 7925573041614324966, guid: a7aa5254fd6e447c7a5ade33745e5794,
         type: 3}
