@@ -5,8 +5,9 @@ using UnityEngine;
 
 
 [CreateAssetMenu()]
-public class CuttingObjectsSO : ScriptableObject
+public class CuttingRecipeSO : ScriptableObject
 {
     public KitchenObjectSO input;
     public KitchenObjectSO output;
+    public int maxCutForCutting;
 }

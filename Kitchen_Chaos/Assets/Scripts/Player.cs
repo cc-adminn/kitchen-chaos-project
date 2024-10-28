@@ -67,7 +67,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         gameInput.OnInteractAlternate += GameInput_OnInteractAlternate;
   }
 
-    void GameInput_OnInteractAlternate(object sender, EventArgs e)
+
+  void GameInput_OnInteractAlternate(object sender, EventArgs e)
     {
         if (selectedCounter != null)
         {
@@ -75,14 +76,15 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         }
     }
 
-    private void Update()
+
+  private void Update()
    {
     HandleMovement();
     HandleInteraction();
    }
 
 
-  void GameInput_OnInteract(object sender, EventArgs eventArgs)              //as the delegate was of type EventArgs so we have to make two paremeter inside that method
+  void GameInput_OnInteract(object sender, EventArgs eventArgs)    //as the delegate was of type EventArgs so we have to make two paremeter inside that method
    {
       if(selectedCounter != null)
       {
@@ -171,35 +173,35 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
 
 
-    public Transform GetKitchenObjSpawnPoint()
+  public Transform GetKitchenObjSpawnPoint()
     {
         return kitchenObjectHoldPoint;
     }  //will return us the hold point of kitchen object of player
 
 
 
-    public void SetKitchenObject(KitchenObjects kitchenObjects)
+  public void SetKitchenObject(KitchenObjects kitchenObjects)
     {
         this.kitchenObject = kitchenObjects;
     }     //update the kitchen object of player
 
 
 
-    public KitchenObjects GetKitchenObjects()
+  public KitchenObjects GetKitchenObjects()
     {
         return kitchenObject;
     }    //will return us the kitchen object present on player
 
 
 
-    public bool IsKitchenObjectPresent()
+  public bool IsKitchenObjectPresent()
     {
         return kitchenObject != null;
     }    //checks if kitchen object is present or not
 
 
 
-    public void ClearKitchenObject()     //set kichen object to null means remove it
+  public void ClearKitchenObject()     //set kichen object to null means remove it
     {
         kitchenObject = null;
     }
