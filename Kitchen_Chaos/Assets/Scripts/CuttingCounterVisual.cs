@@ -8,6 +8,7 @@ public class CuttingCounterVisual : MonoBehaviour
 
     [SerializeField] CuttinggCounter cuttinggCounter;
 
+    [SerializeField] GameObject progressBarUI;
 
     Animator animator;
 
@@ -23,5 +24,12 @@ public class CuttingCounterVisual : MonoBehaviour
     private void CuttinggCounter_OnCutVisuals(object sender, System.EventArgs e)
     {
         animator.SetTrigger(CUT);
+    }
+
+
+    // for UI Progress Bar to look straight toward camera 
+    private void LateUpdate()
+    {
+        progressBarUI.transform.forward = Camera.main.transform.forward;
     }
 }

@@ -685,3 +685,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cuttinggCounter: {fileID: 5420800491044626714}
+  progressBarUI: {fileID: 1820846866548695944}
