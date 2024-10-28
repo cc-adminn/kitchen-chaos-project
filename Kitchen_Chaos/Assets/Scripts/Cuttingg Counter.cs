@@ -19,6 +19,7 @@ public class CuttinggCounter : BaseCounter
         public float progressNormalized;
     }    // making class for sending extra data with the event
 
+    public event EventHandler OnCutVisuals;
 
 
     public override void Interact(Player player)
@@ -56,22 +57,26 @@ public class CuttinggCounter : BaseCounter
                 //DO NOTHING
             }
         }
-    }  // this interaction is the basic interaction to place kitchen objects on the counter
+    }  // this is the basic interaction to place kitchen objects on the counter
 
 
     public override void InteractAlternate(Player player)
     {
         if (IsKitchenObjectPresent() && HasValidRecepie(GetKitchenObjects().GetKitchObjSO()))    // if any kitchen object is present that can be cutted
         {
-            CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeWithInput(GetKitchenObjects().GetKitchObjSO());
-
             cuttingProgress++;
+
+            OnCutVisuals?.Invoke(this, EventArgs.Empty);
+
+            CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeWithInput(GetKitchenObjects().GetKitchObjSO());  //gets the recipe SO specific to the kitchen object we have
 
             OnProgressBarUpdate?.Invoke(this, new OnProgressBarChangedEventArgs
             {
                 progressNormalized = (float)cuttingProgress / cuttingRecipeSO.maxCutForCutting
             });   //firing event for progress Ui Update
 
+
+            // underlying code will only execute when cutting progress is complete
             if (cuttingProgress >= cuttingRecipeSO.maxCutForCutting)
             {
                 KitchenObjectSO outputKitchenObjectSO = GetOutputForInput(GetKitchenObjects().GetKitchObjSO());  //call the function we made to get the output for the recepie
