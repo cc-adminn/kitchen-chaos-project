@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class CuttingCounterVisual : MonoBehaviour
 {
+    enum ProgressBarFace
+    {
+        TowardCamera,
+        Inverted
+    }
+
+    [SerializeField] ProgressBarFace progressBarFacing;
+
     static string CUT = "Cut";
 
     [SerializeField] CuttinggCounter cuttinggCounter;
@@ -12,6 +20,9 @@ public class CuttingCounterVisual : MonoBehaviour
 
     Animator animator;
 
+    float multiplier;
+    
+
 
 
 
@@ -19,6 +30,9 @@ public class CuttingCounterVisual : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         cuttinggCounter.OnCutVisuals += CuttinggCounter_OnCutVisuals;
+
+
+        
     }
 
     private void CuttinggCounter_OnCutVisuals(object sender, System.EventArgs e)
@@ -30,6 +44,18 @@ public class CuttingCounterVisual : MonoBehaviour
     // for UI Progress Bar to look straight toward camera 
     private void LateUpdate()
     {
-        progressBarUI.transform.forward = Camera.main.transform.forward;
+        switch (progressBarFacing)
+        {
+            case ProgressBarFace.Inverted:
+                multiplier = -1f;
+                break;
+            case ProgressBarFace.TowardCamera:
+                multiplier = 1f;
+                break;
+        }
+
+        progressBarUI.transform.forward = Camera.main.transform.forward * multiplier;
     }
+
+    
 }
