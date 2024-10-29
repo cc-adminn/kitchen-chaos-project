@@ -5,24 +5,28 @@ using UnityEngine;
 public class StoveCounter : BaseCounter
 {
     [SerializeField] MeatCookRecipeSO[] meatCookRecipeSO;
+    MeatCookRecipeSO meatCookingRecipeSO;
     float fryingTimer;
 
 
     private void Update()
     {
-        MeatCookRecipeSO meatCookRecipeSO = GetMeatRecipeWithInput(GetKitchenObjects().GetKitchObjSO());
-        fryingTimer += Time.deltaTime;
-
-        if (fryingTimer > meatCookRecipeSO.maxCutForCutting)
+        if (IsKitchenObjectPresent())
         {
-            KitchenObjects kitchenObjects = GetKitchenObjects();
-            kitchenObjects.DestroyItself();
-            //Fried
-            fryingTimer = 0f;
-            KitchenObjects.SpawnKitchenObjectOnParent(meatCookRecipeSO.output, this);
+            fryingTimer += Time.deltaTime;
 
+            if (fryingTimer > meatCookingRecipeSO.maxCutForCutting)
+            {
+                KitchenObjects kitchenObjects = GetKitchenObjects();
+                kitchenObjects.DestroyItself();
+                //Fried
+                fryingTimer = 0f;
+                KitchenObjects.SpawnKitchenObjectOnParent(meatCookingRecipeSO.output, this);
+
+            }
+            Debug.Log(fryingTimer);
         }
-        Debug.Log(fryingTimer);
+        
     }
 
 
@@ -34,6 +38,7 @@ public class StoveCounter : BaseCounter
             {
                 player.GetKitchenObjects().SetKitchenObjectParent(this);
 
+                meatCookingRecipeSO = GetMeatRecipeWithInput(GetKitchenObjects().GetKitchObjSO());  //when interact we get the recipe
             }
             else         //both dont have kitchen object
             {
