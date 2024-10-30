@@ -8,24 +8,47 @@ public class StoveCounter : BaseCounter
     MeatCookRecipeSO meatCookingRecipeSO;
     float fryingTimer;
 
+    public enum FryingState
+    {
+        Idle,
+        Frying,
+        Fried,
+        Burned
+    }
+
+    public FryingState fryingState;
 
     private void Update()
     {
-        if (IsKitchenObjectPresent())
+        switch (fryingState)
         {
-            fryingTimer += Time.deltaTime;
+            case FryingState.Idle:
+                break;
 
-            if (fryingTimer > meatCookingRecipeSO.maxCutForCutting)
-            {
-                KitchenObjects kitchenObjects = GetKitchenObjects();
-                kitchenObjects.DestroyItself();
-                //Fried
-                fryingTimer = 0f;
-                KitchenObjects.SpawnKitchenObjectOnParent(meatCookingRecipeSO.output, this);
+            case FryingState.Frying:
 
-            }
-            Debug.Log(fryingTimer);
+                if (IsKitchenObjectPresent())
+                {
+                    fryingTimer += Time.deltaTime;
+
+                    if (fryingTimer > meatCookingRecipeSO.maxCutForCutting)
+                    {
+                        KitchenObjects kitchenObjects = GetKitchenObjects();
+                        kitchenObjects.DestroyItself();
+                        //Fried
+                        fryingTimer = 0f;
+                        KitchenObjects.SpawnKitchenObjectOnParent(meatCookingRecipeSO.output, this);
+                        fryingState = FryingState.Fried;
+                    }
+                    Debug.Log(fryingTimer);
+                }
+
+                break;
+            default:
+                break;
         }
+
+        
         
     }
 
@@ -36,6 +59,7 @@ public class StoveCounter : BaseCounter
         {
             if (player.IsKitchenObjectPresent() && HasValidRecepie(player.GetKitchenObjects().GetKitchObjSO()))     //player has kitchen object, that can be cutted
             {
+                fryingState = FryingState.Frying;
                 player.GetKitchenObjects().SetKitchenObjectParent(this);
 
                 meatCookingRecipeSO = GetMeatRecipeWithInput(GetKitchenObjects().GetKitchObjSO());  //when interact we get the recipe
