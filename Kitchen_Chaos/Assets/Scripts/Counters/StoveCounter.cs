@@ -1,9 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class StoveCounter : BaseCounter
 {
+    public event EventHandler<OnFryingStateChangedEventArgs> OnFryingStateChanged;
+    public class OnFryingStateChangedEventArgs: EventArgs
+    {
+        public FryingState fryingStateOfEvenetArgs;
+    }
+
     [SerializeField] MeatCookRecipeSO[] meatCookRecipeSOs;
     [SerializeField] BurningRecipeSO[] burningRecipeSOs;
 
@@ -50,7 +56,6 @@ public class StoveCounter : BaseCounter
                 case FryingState.Frying:   //frying state logic
 
                         fryingTimer += Time.deltaTime;
-
                         if (fryingTimer > meatCookingRecipeSO.maxCutForCutting)
                         {
                             GetKitchenObjects().DestroyItself();
@@ -66,8 +71,8 @@ public class StoveCounter : BaseCounter
                 case FryingState.Fried:    //fried state logic
 
                     burningRecipeSO = GetBurningRecipeWithInput(GetKitchenObjects().GetKitchObjSO());
-                    Debug.Log(burningRecipeSO.name);
                     burningTime += Time.deltaTime;
+                    
 
                     if (burningTime > burningRecipeSO.maxTimeForBurning)
                     {
@@ -88,7 +93,7 @@ public class StoveCounter : BaseCounter
             }
 
         }
-        Debug.Log(fryingTimer);
+        OnFryingStateChanged?.Invoke(this, new OnFryingStateChangedEventArgs { fryingStateOfEvenetArgs = fryingState });
     }
 
 
@@ -160,6 +165,7 @@ public class StoveCounter : BaseCounter
         }
         return null;
     }    // this method returns us the recipe SO from the kitchen Object Input it has
+
 
     private BurningRecipeSO GetBurningRecipeWithInput(KitchenObjectSO kitchenObjectSOInput)
     {
