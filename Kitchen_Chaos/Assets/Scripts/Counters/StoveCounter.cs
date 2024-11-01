@@ -2,8 +2,9 @@ using UnityEngine;
 using System;
 
 
-public class StoveCounter : BaseCounter
+public class StoveCounter : BaseCounter,IHasProgress
 {
+    public event EventHandler<IHasProgress.OnProgressBarChangedEventArgs> OnProgressBarUpdate;    // declaring event
     public event EventHandler<OnFryingStateChangedEventArgs> OnFryingStateChanged;
     public class OnFryingStateChangedEventArgs: EventArgs
     {
@@ -56,7 +57,9 @@ public class StoveCounter : BaseCounter
                 case FryingState.Frying:   //frying state logic
 
                         fryingTimer += Time.deltaTime;
-                        if (fryingTimer > meatCookingRecipeSO.maxCutForCutting)
+                    OnProgressBarUpdate?.Invoke(this, new IHasProgress.OnProgressBarChangedEventArgs { progressNormalized = fryingTimer / meatCookingRecipeSO.maxCutForCutting });
+
+                    if (fryingTimer > meatCookingRecipeSO.maxCutForCutting)
                         {
                             GetKitchenObjects().DestroyItself();
                             //Fried
@@ -72,7 +75,8 @@ public class StoveCounter : BaseCounter
 
                     burningRecipeSO = GetBurningRecipeWithInput(GetKitchenObjects().GetKitchObjSO());
                     burningTime += Time.deltaTime;
-                    
+
+                    OnProgressBarUpdate?.Invoke(this, new IHasProgress.OnProgressBarChangedEventArgs { progressNormalized = burningTime / burningRecipeSO.maxTimeForBurning });
 
                     if (burningTime > burningRecipeSO.maxTimeForBurning)
                     {
@@ -110,6 +114,7 @@ public class StoveCounter : BaseCounter
 
                 fryingTimer = 0f;
                 fryingState = FryingState.Frying;
+                OnProgressBarUpdate?.Invoke(this, new IHasProgress.OnProgressBarChangedEventArgs { progressNormalized = fryingTimer / meatCookingRecipeSO.maxCutForCutting});
                 
             }
             else         //both dont have kitchen object

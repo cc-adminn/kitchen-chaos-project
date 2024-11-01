@@ -7,16 +7,24 @@ using System;
 public class ProgressBarUI : MonoBehaviour
 {
     [SerializeField] Image barImage;
-    [SerializeField] CuttinggCounter cuttingCounter;
+    [SerializeField] GameObject hasProgressGameobject;
+
+    IHasProgress hasProgress;
 
     private void Start()
     {
-        cuttingCounter.OnProgressBarUpdate += CuttinggCounter_OnProgressBarUpdate;
+        hasProgress = hasProgressGameobject.GetComponent<IHasProgress>();
+
+        if (hasProgress == null)
+        {
+            Debug.LogError(hasProgress + "does not have i interface");
+        }
+        hasProgress.OnProgressBarUpdate += HasProgress_OnProgressBarUpdate;
         barImage.fillAmount = 0f;
         Hide();
     }
 
-    private void CuttinggCounter_OnProgressBarUpdate(object sender, CuttinggCounter.OnProgressBarChangedEventArgs e)
+    private void HasProgress_OnProgressBarUpdate(object sender, IHasProgress.OnProgressBarChangedEventArgs e)
     {
         barImage.fillAmount = e.progressNormalized;
 

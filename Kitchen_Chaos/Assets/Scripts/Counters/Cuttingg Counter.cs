@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class CuttinggCounter : BaseCounter
+public class CuttinggCounter : BaseCounter, IHasProgress
 {
 
     [SerializeField] CuttingRecipeSO[] cuttingObjectsSOs;
@@ -12,13 +12,9 @@ public class CuttinggCounter : BaseCounter
 
 
 
-    public event EventHandler<OnProgressBarChangedEventArgs> OnProgressBarUpdate;    // declaring event
+    public event EventHandler<IHasProgress.OnProgressBarChangedEventArgs> OnProgressBarUpdate;    // declaring event
 
-    public class OnProgressBarChangedEventArgs : EventArgs
-    {
-        public float progressNormalized;
-    }    // making class for sending extra data with the event
-
+    
     public event EventHandler OnCutVisuals;
 
 
@@ -35,7 +31,7 @@ public class CuttinggCounter : BaseCounter
 
                 CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeWithInput(GetKitchenObjects().GetKitchObjSO());
 
-                OnProgressBarUpdate?.Invoke(this, new OnProgressBarChangedEventArgs   //firing event for progress Ui Update
+                OnProgressBarUpdate?.Invoke(this, new IHasProgress.OnProgressBarChangedEventArgs   //firing event for progress Ui Update
                 {
                     progressNormalized = (float)cuttingProgress / cuttingRecipeSO.maxCutForCutting 
                 });
@@ -70,7 +66,7 @@ public class CuttinggCounter : BaseCounter
 
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeWithInput(GetKitchenObjects().GetKitchObjSO());  //gets the recipe SO specific to the kitchen object we have
 
-            OnProgressBarUpdate?.Invoke(this, new OnProgressBarChangedEventArgs
+            OnProgressBarUpdate?.Invoke(this, new IHasProgress.OnProgressBarChangedEventArgs
             {
                 progressNormalized = (float)cuttingProgress / cuttingRecipeSO.maxCutForCutting
             });   //firing event for progress Ui Update
