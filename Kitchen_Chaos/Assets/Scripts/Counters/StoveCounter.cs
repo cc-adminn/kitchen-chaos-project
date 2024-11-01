@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class StoveCounter : BaseCounter
 {
-    [SerializeField] MeatCookRecipeSO[] meatCookRecipeSO;
+    [SerializeField] MeatCookRecipeSO[] meatCookRecipeSOs;
+    [SerializeField] BurningRecipeSO[] burningRecipeSOs;
+
     MeatCookRecipeSO meatCookingRecipeSO;
+    BurningRecipeSO burningRecipeSO;
     float fryingTimer;
+    float burningTime;
 
     public enum FryingState
     {
@@ -18,38 +22,73 @@ public class StoveCounter : BaseCounter
 
     public FryingState fryingState;
 
+
+
+
+
+    /// <summary>
+               ///BODY STATRS HERE
+    /// </summary>
+    private void Start()
+    {
+        fryingState = FryingState.Idle;
+    }
+
     private void Update()
     {
-        switch (fryingState)
+        if (IsKitchenObjectPresent())
         {
-            case FryingState.Idle:
-                break;
 
-            case FryingState.Frying:
 
-                if (IsKitchenObjectPresent())
-                {
-                    fryingTimer += Time.deltaTime;
+            switch (fryingState)
+            {
+                case FryingState.Idle:       //idle state logic
+                    fryingTimer = 0f;
+                    burningTime = 0f;
+                    break;
 
-                    if (fryingTimer > meatCookingRecipeSO.maxCutForCutting)
+                case FryingState.Frying:   //frying state logic
+
+                        fryingTimer += Time.deltaTime;
+
+                        if (fryingTimer > meatCookingRecipeSO.maxCutForCutting)
+                        {
+                            GetKitchenObjects().DestroyItself();
+                            //Fried
+
+                            KitchenObjects.SpawnKitchenObjectOnParent(meatCookingRecipeSO.output, this);
+   
+                            fryingState = FryingState.Fried;
+                        }
+                    break;
+
+
+                case FryingState.Fried:    //fried state logic
+
+                    burningRecipeSO = GetBurningRecipeWithInput(GetKitchenObjects().GetKitchObjSO());
+                    Debug.Log(burningRecipeSO.name);
+                    burningTime += Time.deltaTime;
+
+                    if (burningTime > burningRecipeSO.maxTimeForBurning)
                     {
-                        KitchenObjects kitchenObjects = GetKitchenObjects();
-                        kitchenObjects.DestroyItself();
+
+                        GetKitchenObjects().DestroyItself();
                         //Fried
-                        fryingTimer = 0f;
-                        KitchenObjects.SpawnKitchenObjectOnParent(meatCookingRecipeSO.output, this);
-                        fryingState = FryingState.Fried;
+
+                        KitchenObjects.SpawnKitchenObjectOnParent(burningRecipeSO.output, this);
+
+                        fryingState = FryingState.Burned;
                     }
-                    Debug.Log(fryingTimer);
-                }
+                    break;
 
-                break;
-            default:
-                break;
+
+                case FryingState.Burned:   //burned state
+
+                    break;
+            }
+
         }
-
-        
-        
+        Debug.Log(fryingTimer);
     }
 
 
@@ -63,6 +102,10 @@ public class StoveCounter : BaseCounter
                 player.GetKitchenObjects().SetKitchenObjectParent(this);
 
                 meatCookingRecipeSO = GetMeatRecipeWithInput(GetKitchenObjects().GetKitchObjSO());  //when interact we get the recipe
+
+                fryingTimer = 0f;
+                fryingState = FryingState.Frying;
+                
             }
             else         //both dont have kitchen object
             {
@@ -74,6 +117,7 @@ public class StoveCounter : BaseCounter
             if (!player.IsKitchenObjectPresent())    //player has nothing
             {
                 GetKitchenObjects().SetKitchenObjectParent(player);
+                fryingState = FryingState.Idle;
             }
             else    //both have kitchen object
             {
@@ -107,7 +151,7 @@ public class StoveCounter : BaseCounter
 
     private MeatCookRecipeSO GetMeatRecipeWithInput(KitchenObjectSO kitchenObjectSOInput)
     {
-        foreach (var recipe in meatCookRecipeSO)
+        foreach (var recipe in meatCookRecipeSOs)
         {
             if (recipe.input == kitchenObjectSOInput)
             {
@@ -117,7 +161,17 @@ public class StoveCounter : BaseCounter
         return null;
     }    // this method returns us the recipe SO from the kitchen Object Input it has
 
-
+    private BurningRecipeSO GetBurningRecipeWithInput(KitchenObjectSO kitchenObjectSOInput)
+    {
+        foreach (var recipes in burningRecipeSOs)
+        {
+            if (recipes.input == kitchenObjectSOInput)
+            {
+                return recipes;
+            }
+        }
+        return null;
+    }
 
 
 
