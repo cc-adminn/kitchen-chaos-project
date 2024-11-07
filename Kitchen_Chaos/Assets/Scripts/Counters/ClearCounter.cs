@@ -17,7 +17,7 @@ public class ClearCounter : BaseCounter
             }
             else         //both dont have kitchen object
             {
-                // can do swapping here but we are not allowing it, because in Kitchen object script SetKitchenObjectParent we have said set parent if it dont have kitchen object before
+                
             }
         }
         else      //counter has kitchen object
@@ -28,7 +28,26 @@ public class ClearCounter : BaseCounter
             }
             else    //both have kitchen object
             {
-                //DO NOTHING
+                //putting kitchen object over plate
+                if (player.GetKitchenObjects().TryGetPlateOBject(out PlateKitchenObject plateKitchenObject))      // checking if the kitchen object the player is holding is of type PlateKitchenObject (and it is because it is inheriting form KitchenObjects script)
+                {
+                    //player is holding a plate and counter has other kitchen object
+                    if (plateKitchenObject.TryAddIngredients(GetKitchenObjects().GetKitchObjSO()))
+                    {
+                        GetKitchenObjects().DestroyItself();
+                    }
+                }
+                else
+                {
+                    //if counter has plate and player has other kitchen Object
+                    if (GetKitchenObjects().TryGetPlateOBject(out PlateKitchenObject plateKitchenObject1))
+                    {
+                        if(plateKitchenObject1.TryAddIngredients(player.GetKitchenObjects().GetKitchObjSO()))
+                        {
+                            player.GetKitchenObjects().DestroyItself();
+                        }
+                    }
+                }    
             }
         }
     }

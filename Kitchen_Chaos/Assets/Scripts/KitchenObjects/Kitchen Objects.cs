@@ -13,6 +13,20 @@ public class KitchenObjects : MonoBehaviour
 
     private IKitchenObjectParent kitchenObjectParent;
 
+    public bool TryGetPlateOBject(out PlateKitchenObject plateKitchenObject)
+    {
+        if (this is PlateKitchenObject)
+        {
+            plateKitchenObject = this as PlateKitchenObject;
+            return true;
+        }
+        else
+        {
+            plateKitchenObject = null;
+            return false;
+        }
+    }
+
     
     public KitchenObjectSO GetKitchObjSO()
     {

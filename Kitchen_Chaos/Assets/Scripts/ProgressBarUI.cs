@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
@@ -8,7 +6,6 @@ public class ProgressBarUI : MonoBehaviour
 {
     [SerializeField] Image barImage;
     [SerializeField] GameObject hasProgressGameobject;
-
     IHasProgress hasProgress;
 
     private void Start()
@@ -23,12 +20,12 @@ public class ProgressBarUI : MonoBehaviour
         barImage.fillAmount = 0f;
         Hide();
     }
-
+    
     private void HasProgress_OnProgressBarUpdate(object sender, IHasProgress.OnProgressBarChangedEventArgs e)
     {
         barImage.fillAmount = e.progressNormalized;
 
-        if (e.progressNormalized == 0 || e.progressNormalized == 1)
+        if (e.progressNormalized == 0 || e.progressNormalized == 1  )
         {
             Hide();
         }

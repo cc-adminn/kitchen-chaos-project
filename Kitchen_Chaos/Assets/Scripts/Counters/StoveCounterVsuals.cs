@@ -11,6 +11,8 @@ public class StoveCounterVsuals : MonoBehaviour
         stoveCounter.OnFryingStateChanged += StoveCounter_OnFryingStateChanged;
     }
 
+    
+
     private void StoveCounter_OnFryingStateChanged(object sender, StoveCounter.OnFryingStateChangedEventArgs e)
     {
         if (e.fryingStateOfEvenetArgs == StoveCounter.FryingState.Frying || e.fryingStateOfEvenetArgs == StoveCounter.FryingState.Fried)

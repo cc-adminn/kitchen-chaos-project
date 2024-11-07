@@ -39,7 +39,7 @@ public class CuttinggCounter : BaseCounter, IHasProgress
             }
             else         //both dont have kitchen object
             {
-                // can do swapping here but we are not allowing it, because in Kitchen object script SetKitchenObjectParent we have said set parent if it dont have kitchen object before
+                             
             }
         }
         else      //counter has kitchen object
@@ -50,7 +50,15 @@ public class CuttinggCounter : BaseCounter, IHasProgress
             }
             else    //both have kitchen object
             {
-                //DO NOTHING
+                // putting kitchen object over plate
+                if (player.GetKitchenObjects().TryGetPlateOBject(out PlateKitchenObject plateKitchenObject))      // checking if the kitchen object the player is holding is of type PlateKitchenObject (and it is because it is inheriting form KitchenObjects script)
+                {
+                    //player is holding a plate
+                    if (plateKitchenObject.TryAddIngredients(GetKitchenObjects().GetKitchObjSO()))
+                    {
+                        GetKitchenObjects().DestroyItself();
+                    }
+                }
             }
         }
     }  // this is the basic interaction to place kitchen objects on the counter

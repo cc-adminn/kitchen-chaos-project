@@ -92,7 +92,7 @@ public class StoveCounter : BaseCounter,IHasProgress
 
 
                 case FryingState.Burned:   //burned state
-
+                    
                     break;
             }
 
@@ -127,12 +127,25 @@ public class StoveCounter : BaseCounter,IHasProgress
             if (!player.IsKitchenObjectPresent())    //player has nothing
             {
                 GetKitchenObjects().SetKitchenObjectParent(player);
+                burningTime = 0f;
                 fryingState = FryingState.Idle;
             }
             else    //both have kitchen object
             {
-                //DO NOTHING
+                //putting kitchen object over plate
+                if (player.GetKitchenObjects().TryGetPlateOBject(out PlateKitchenObject plateKitchenObject))      // checking if the kitchen object the player is holding is of type PlateKitchenObject (and it is because it is inheriting form KitchenObjects script)
+                {
+                    //player is holding a plate
+                    if (plateKitchenObject.TryAddIngredients(GetKitchenObjects().GetKitchObjSO()))
+                    {
+                        GetKitchenObjects().DestroyItself();
+                        fryingTimer = 0f;
+                        burningTime = 0f;
+                        fryingState = FryingState.Idle;
+                    }
+                }
             }
+            
         }
 
     }
