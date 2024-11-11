@@ -1,16 +1,20 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 
 public class DeliveryManager : MonoBehaviour
 {
     [SerializeField] RecipeListSO recipeListSO;
+    public event EventHandler OnRecipeDelivered;
+    public event EventHandler OnRecipeSpawned;
+
 
 
     private List<RecipeSO> waitingRecipeSOList;
     
     float recipeTimer;
-    float recipeTimerMax = 4f;
+    [SerializeField] float recipeTimerMax = 8f;
     int waitngRecipeMaxCount = 4;
     public static DeliveryManager Instance { get; private set; }
 
@@ -30,9 +34,9 @@ public class DeliveryManager : MonoBehaviour
 
             if (waitingRecipeSOList.Count < waitngRecipeMaxCount)      // checking if our self made list is not full (if there are less than 4 recipe add more recipe)
             {
-                RecipeSO currentWaitingRecipeSO = recipeListSO.waitingRecipeList[Random.Range(0, recipeListSO.waitingRecipeList.Count)];   // make a field of type RecipeSO and assign it as a random recipe
+                RecipeSO currentWaitingRecipeSO = recipeListSO.waitingRecipeList[UnityEngine.Random.Range(0, recipeListSO.waitingRecipeList.Count)];   // make a field of type RecipeSO and assign it as a random recipe
                 waitingRecipeSOList.Add(currentWaitingRecipeSO);   // add that Recipe to our waitingList
-                Debug.Log(currentWaitingRecipeSO);
+                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
     }
@@ -50,10 +54,12 @@ public class DeliveryManager : MonoBehaviour
                 // if this if is true, mean both plate and the current recipe has same number of ingredients
 
                 bool plateContentsMatchesRecipe = false;
+
                 // now check each ingredients in current waitingRecipeFirst
                 foreach (KitchenObjectSO ingredientSO in currentWaitingRecipeSO.ingredientsOfRecipe)
                 {
                     bool ingredientFound = false;
+
                     // now check each ingredients in current plate
                     foreach (KitchenObjectSO ingredientInPlateSO in plateKitchenObject.GetKitchenObjectSOList())
                     {
@@ -76,7 +82,9 @@ public class DeliveryManager : MonoBehaviour
 
                 if (plateContentsMatchesRecipe)
                 {
+                    //PLAYER DELIVERED THE CORRECT RECIPE
                     //the recipe ingredients was found in the recipe
+                    OnRecipeDelivered?.Invoke(this, EventArgs.Empty);
                     Debug.Log("Player delivered the correct recipe");
                     waitingRecipeSOList.RemoveAt(i);
                     return;
@@ -87,5 +95,12 @@ public class DeliveryManager : MonoBehaviour
 
         //no matches found
         Debug.Log("player did not deliver correct recipe");
+    }
+
+
+
+    public List<RecipeSO> GetWaititngRecipeSOList()
+    {
+        return waitingRecipeSOList;
     }
 }

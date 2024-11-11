@@ -36,7 +36,7 @@ public class PlateCounter : BaseCounter
 
     public override void Interact(Player player)
     {
-        if (!IsKitchenObjectPresent() && isPlatePresent)  //counter has nothing 
+        if (!IsKitchenObjectPresent() && isPlatePresent && !player.IsKitchenObjectPresent())  //counter has nothing 
         {
             KitchenObjects.SpawnKitchenObjectOnParent(plateObjectSO, player);
             plateCount--;

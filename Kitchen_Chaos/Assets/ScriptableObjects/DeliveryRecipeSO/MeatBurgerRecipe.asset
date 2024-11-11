@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 641a8ace833b048a18e537d644e48266, type: 3}
   m_Name: MeatBurgerRecipe
   m_EditorClassIdentifier: 
-  recipeName: MeatBurger
+  recipeName: Meat Burger
   ingredientsOfRecipe:
   - {fileID: 11400000, guid: 6ee4cce8ca6584d2183acad0432d1eea, type: 2}
   - {fileID: 11400000, guid: a73f5a7e3964e48278835c6205cd4d01, type: 2}
