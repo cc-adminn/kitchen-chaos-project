@@ -31,7 +31,6 @@ public class PlateCounterVisuals : MonoBehaviour
     private void PlateCounter_OnPlateSpawned(object sender, System.EventArgs e)
     {
         Transform plateVisual = Instantiate(plateVisuals, counterTopPoint);
-        Debug.Log(plateVisuals.name);
         float plateOffSet = .1f;
         plateVisual.localPosition = new Vector3(0, plateOffSet * plateSpawnedList.Count);
 
