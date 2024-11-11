@@ -42,5 +42,10 @@ public class DeliveryManagerUI : MonoBehaviour
             templateUI.GetComponent<RecipeTemplateSIngleUI>().SetRecipeText(recipe);
 
         }
-    }    
+    }
+
+    private void Update()
+    {
+        UpdateVisuals();
+    }
 }

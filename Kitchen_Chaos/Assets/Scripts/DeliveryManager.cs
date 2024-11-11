@@ -87,6 +87,7 @@ public class DeliveryManager : MonoBehaviour
                     OnRecipeDelivered?.Invoke(this, EventArgs.Empty);
                     Debug.Log("Player delivered the correct recipe");
                     waitingRecipeSOList.RemoveAt(i);
+                    recipeTimer = 0f;
                     return;
                 }
             }
