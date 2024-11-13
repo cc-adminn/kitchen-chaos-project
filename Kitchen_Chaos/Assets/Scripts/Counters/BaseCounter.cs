@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class BaseCounter : MonoBehaviour, IKitchenObjectParent
 {
-
+    public static event EventHandler OnObjectDroppedOnCounter;
     private KitchenObjects kitchenObjects;
     [SerializeField] Transform spawnPointCounter;
 
@@ -29,6 +28,11 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     public void SetKitchenObject(KitchenObjects kitchenObjects)
     {
         this.kitchenObjects = kitchenObjects;
+
+        if (kitchenObjects != null)
+        {
+            OnObjectDroppedOnCounter?.Invoke(this, EventArgs.Empty);
+        }
     }
 
 

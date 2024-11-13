@@ -8,6 +8,9 @@ public class DeliveryManager : MonoBehaviour
     [SerializeField] RecipeListSO recipeListSO;
     public event EventHandler OnRecipeDelivered;
     public event EventHandler OnRecipeSpawned;
+    public event EventHandler OnRecipeSuccess;
+    public event EventHandler OnRecipeFailed;
+
 
 
 
@@ -85,6 +88,7 @@ public class DeliveryManager : MonoBehaviour
                     //PLAYER DELIVERED THE CORRECT RECIPE
                     //the recipe ingredients was found in the recipe
                     OnRecipeDelivered?.Invoke(this, EventArgs.Empty);
+                    OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
                     Debug.Log("Player delivered the correct recipe");
                     waitingRecipeSOList.RemoveAt(i);
                     recipeTimer = 0f;
@@ -96,6 +100,7 @@ public class DeliveryManager : MonoBehaviour
 
         //no matches found
         Debug.Log("player did not deliver correct recipe");
+        OnRecipeFailed?.Invoke(this, EventArgs.Empty);
     }
 
 

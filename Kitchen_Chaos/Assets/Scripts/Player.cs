@@ -7,7 +7,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 {
 
 
-
+  public event EventHandler OnObjectPickup;
 
   public static Player Instance{get; private set;}       // using singleton patterm making proprty of Player class in which every class can get its fields but no one can set
 
@@ -183,6 +183,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent
   public void SetKitchenObject(KitchenObjects kitchenObjects)
     {
         this.kitchenObject = kitchenObjects;
+
+        if (kitchenObject != null)
+        {
+            OnObjectPickup?.Invoke(this, EventArgs.Empty);
+        }
     }     //update the kitchen object of player
 
 

@@ -5,6 +5,7 @@ using System;
 
 public class CuttinggCounter : BaseCounter, IHasProgress
 {
+    public static event EventHandler OnAnyCut;
 
     [SerializeField] CuttingRecipeSO[] cuttingObjectsSOs;
 
@@ -71,6 +72,8 @@ public class CuttinggCounter : BaseCounter, IHasProgress
             cuttingProgress++;
 
             OnCutVisuals?.Invoke(this, EventArgs.Empty);
+
+            OnAnyCut?.Invoke(this, EventArgs.Empty);
 
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeWithInput(GetKitchenObjects().GetKitchObjSO());  //gets the recipe SO specific to the kitchen object we have
 
