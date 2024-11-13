@@ -68,15 +68,6 @@ public class Player : MonoBehaviour, IKitchenObjectParent
   }
 
 
-  void GameInput_OnInteractAlternate(object sender, EventArgs e)
-    {
-        if (selectedCounter != null)
-        {
-            selectedCounter.InteractAlternate(this);
-        }
-    }
-
-
   private void Update()
    {
     HandleMovement();
@@ -86,14 +77,26 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
   void GameInput_OnInteract(object sender, EventArgs eventArgs)    //as the delegate was of type EventArgs so we have to make two paremeter inside that method
    {
-      if(selectedCounter != null)
+     if (!GameManager.Instance.IsGamePlaying()) return;  // if the state of game is NOT game Playing do not execute further code
+
+        if (selectedCounter != null)
       {
-        selectedCounter.Interact(this);
+         selectedCounter.Interact(this);
       }
    }
 
 
-  private void HandleInteraction()
+    void GameInput_OnInteractAlternate(object sender, EventArgs e)
+    {
+        if (!GameManager.Instance.IsGamePlaying()) return;    // if the state of game is NOT game Playing do not execute further code
+
+        if (selectedCounter != null)
+        {
+            selectedCounter.InteractAlternate(this);
+        }
+    }
+
+    private void HandleInteraction()
    {
     Vector2 inputVector2FromGameInput = gameInput.GetMovementVector2Normalized();
     Vector3 movDir = new Vector3(inputVector2FromGameInput.x, 0, inputVector2FromGameInput.y);
