@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
                 break;
 
             case StateOfGame.GameOver:
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
                 break;
             }
             
@@ -77,5 +78,12 @@ public class GameManager : MonoBehaviour
     public float GetCountDown()
     {
         return countDownTimer;  
-    } 
+    }
+
+    public bool IsGameOverState()
+    {
+        return stateOfGame == StateOfGame.GameOver;
+    }
+
+    public float Get
 }

@@ -15,11 +15,16 @@ public class DeliveryManager : MonoBehaviour
 
 
     private List<RecipeSO> waitingRecipeSOList;
+    [SerializeField] float recipeTimerMax = 8f;
     
     float recipeTimer;
-    [SerializeField] float recipeTimerMax = 8f;
     int waitngRecipeMaxCount = 4;
+
+    int successfulDeliveries;
+
     public static DeliveryManager Instance { get; private set; }
+
+
 
     private void Awake()
     {
@@ -92,6 +97,7 @@ public class DeliveryManager : MonoBehaviour
                     Debug.Log("Player delivered the correct recipe");
                     waitingRecipeSOList.RemoveAt(i);
                     recipeTimer = 0f;
+                    successfulDeliveries++;
                     return;
                 }
             }
@@ -108,5 +114,10 @@ public class DeliveryManager : MonoBehaviour
     public List<RecipeSO> GetWaititngRecipeSOList()
     {
         return waitingRecipeSOList;
+    }
+
+    public int GetRecipeDeliveredCount()
+    {   
+        return successfulDeliveries;
     }
 }
